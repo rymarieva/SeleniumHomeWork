@@ -111,15 +111,15 @@ namespace SeleniumHomeWork
             //Act
             driver.Navigate().GoToUrl("https://www.ukr.net/");
             var ukrNetHomePage = new UkrNetHomePage(driver);
-            ukrNetHomePage.IFrameSendKey(driver, ukrNetHomePage.loginFrameName, ukrNetHomePage.loginFieldId, login);
-            ukrNetHomePage.IFrameSendKey(driver, ukrNetHomePage.loginFrameName, ukrNetHomePage.passwordFieldId, invalidPassword);
+            ukrNetHomePage.IFrameSendKey(ukrNetHomePage.loginFrameName, ukrNetHomePage.loginFieldId, login);
+            ukrNetHomePage.IFrameSendKey(ukrNetHomePage.loginFrameName, ukrNetHomePage.passwordFieldId, invalidPassword);
 
             //ukrNetHomePage.IFrameClickElement(driver, ukrNetHomePage.loginFrameName, ukrNetHomePage.submitButton);
             driver.SwitchTo().Frame("mail widget");
             ukrNetHomePage.submitButton1.Click();
             driver.SwitchTo().DefaultContent();
 
-            string actualErrorMassage = ukrNetHomePage.IFrameGetElementText(driver, ukrNetHomePage.loginFrameName, ukrNetHomePage.errorMassage);
+            string actualErrorMassage = ukrNetHomePage.IFrameGetElementText(ukrNetHomePage.loginFrameName, ukrNetHomePage.errorMassage);
             
 
             //Assert
