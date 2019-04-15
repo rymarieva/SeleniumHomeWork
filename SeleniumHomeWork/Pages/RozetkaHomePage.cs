@@ -18,8 +18,8 @@ namespace SeleniumHomeWork.Pages
         [FindsBy(How = How.XPath, Using = "//a[@href = 'https://rozetka.com.ua/cart/']/..")]
         public IWebElement basketButton;
 
-        [FindsBy(How = How.CssSelector, Using = "[class='header-actions__dummy-content header-actions__dummy-content_type_cart'] p")]
-        public IList<IWebElement> basketPopupMessageText;
+        [FindsBy(How = How.CssSelector, Using = "[class='header-actions__dummy-content header-actions__dummy-content_type_cart']")]
+        public IWebElement basketPopupMessageText;
 
         public RozetkaHomePage(IWebDriver driver) : base(driver)
         {

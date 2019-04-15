@@ -1,15 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using OpenQA.Selenium;
-using OpenQA.Selenium.Support.PageObjects;
+﻿using OpenQA.Selenium;
+using SeleniumExtras.PageObjects;
 //using OpenQA.Selenium. Extras
 
 namespace SeleniumHomeWork.Pages
 {
-    class UkrNetHomePage : BasePage
+    internal class UkrNetHomePage : BasePage
     {
 
         public string loginFrameName = "mail widget";
@@ -22,8 +17,19 @@ namespace SeleniumHomeWork.Pages
         [FindsBy(How = How.CssSelector, Using = "button.form__submit")]
         public IWebElement submitButton1;
 
+        public IWebElement SubmitButton2 => Driver.FindElement(By.CssSelector("button.form__submit"));
+
+        public IWebElement SubmitButton3
+        {
+            get
+            {
+                return Driver.FindElement(By.CssSelector("button.form__submit"));
+            }
+        }
+
+
         public UkrNetHomePage(IWebDriver driver) : base(driver)
-        {        
+        {
         }
 
     }

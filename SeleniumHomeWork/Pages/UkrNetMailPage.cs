@@ -5,13 +5,14 @@ using System.Text;
 using System.Threading.Tasks;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Support.PageObjects;
+//using SeleniumExtras.PageObjects;
 
 namespace SeleniumHomeWork.Pages
 {
     class UkrNetMailPage : BasePage
     {
         public string massegeFrameId = "mce_1_ifr";
-        public string massgeFrameId = "#tinymce > div";
+        public string massageFrameId = "#tinymce > div";
 
 
         [FindsBy(How = How.CssSelector, Using = "button.default.compose")]
