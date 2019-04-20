@@ -7,25 +7,35 @@ namespace SeleniumHomeWork.Pages
     internal class UkrNetHomePage : BasePage
     {
 
-        public string loginFrameName = "mail widget";
-        public string loginFieldId = "#id-input-login";
-        public string passwordFieldId = "#id-input-password";
-        public string submitButton = "button.form__submit";
-        public string errorMassage = "p.form__error.form__error_wrong.form__error_visible";
-        public string incomingMailLink = "a.service__entry.service__entry_mail";
+        public string loginFrame = "mail widget";
+
+        [FindsBy(How = How.CssSelector, Using = "#id-input-login")]
+        public IWebElement loginField;
+
+        [FindsBy(How = How.CssSelector, Using = "#id-input-password")]
+        public IWebElement passwordField;
 
         [FindsBy(How = How.CssSelector, Using = "button.form__submit")]
-        public IWebElement submitButton1;
+        public IWebElement submitButton;
 
-        public IWebElement SubmitButton2 => Driver.FindElement(By.CssSelector("button.form__submit"));
+        [FindsBy(How = How.CssSelector, Using = "p.form__error.form__error_wrong.form__error_visible")]
+        public IWebElement errorMassage;
 
-        public IWebElement SubmitButton3
-        {
-            get
-            {
-                return Driver.FindElement(By.CssSelector("button.form__submit"));
-            }
-        }
+        [FindsBy(How = How.CssSelector, Using = "a.service__entry.service__entry_mail")]
+        public IWebElement incomingMailLink;
+
+        //[FindsBy(How = How.CssSelector, Using = "button.form__submit")]
+        //public IWebElement submitButton1;
+
+        //public IWebElement SubmitButton2 => Driver.FindElement(By.CssSelector("button.form__submit"));
+
+        //public IWebElement SubmitButton3
+        //{
+        //    get
+        //    {
+        //        return Driver.FindElement(By.CssSelector("button.form__submit"));
+        //    }
+        //}
 
 
         public UkrNetHomePage(IWebDriver driver) : base(driver)

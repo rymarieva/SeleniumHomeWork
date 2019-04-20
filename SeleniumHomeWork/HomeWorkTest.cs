@@ -4,6 +4,7 @@ using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium.Interactions;
 using SeleniumHomeWork.Pages;
 using System;
+using System.Collections.ObjectModel;
 using System.Threading;
 
 namespace SeleniumHomeWork
@@ -112,19 +113,11 @@ namespace SeleniumHomeWork
             //Act
             driver.Navigate().GoToUrl("https://www.ukr.net/");
             var ukrNetHomePage = new UkrNetHomePage(driver);
-            ukrNetHomePage.IFrameSendKey(ukrNetHomePage.loginFrameName, ukrNetHomePage.loginFieldId, login);
-            ukrNetHomePage.IFrameSendKey(ukrNetHomePage.loginFrameName, ukrNetHomePage.passwordFieldId, invalidPassword);
-            //ukrNetHomePage.IFrameClickElement(ukrNetHomePage.loginFrameName, ukrNetHomePage.submitButton);
-            driver.SwitchTo().Frame("mail widget");
-            ukrNetHomePage.SubmitButton3.Click();
-            driver.SwitchTo().DefaultContent();
-
-            //driver.SwitchTo().Frame("mail widget");
-            //ukrNetHomePage.SubmitButton2.Click();
-            //driver.SwitchTo().DefaultContent();
-
-            string actualErrorMassage = ukrNetHomePage.IFrameGetElementText(ukrNetHomePage.loginFrameName, ukrNetHomePage.errorMassage);
-
+            driver.SwitchTo().Frame(ukrNetHomePage.loginFrame);
+            ukrNetHomePage.loginField.SendKeys(login);
+            ukrNetHomePage.passwordField.SendKeys(invalidPassword);
+            ukrNetHomePage.submitButton.Click();
+            string actualErrorMassage = ukrNetHomePage.errorMassage.Text;
 
             //Assert
             Assert.AreEqual(expectedErrorMassage, actualErrorMassage, $"Expected massage is '{expectedErrorMassage}', but actual is '{actualErrorMassage}'");
@@ -137,48 +130,51 @@ namespace SeleniumHomeWork
             //Arrange
             string login = "olha.rymarieva";
             string validPassword = "uSJEBBYkmkuX4cs";
-            string sendTo = "terraco_kiev@ukr.net";
+
+            string sendTo = "o.rymacrieva@gmail.com";
             string subject = "Sending message - test";
             string messageText = "Hello, Andrey!";
+            string filePath = "C:/Users/oli4k/Documents/test.txt";
+            string exepectedMassegeSendText = "Ваш лист надісланоНаписати щеПовернутись у вхідні";
 
             //Act
             driver.Navigate().GoToUrl("https://www.ukr.net/");
+            var oldWindowHandles = driver.WindowHandles;
             var ukrNetHomePage = new UkrNetHomePage(driver);
-            ukrNetHomePage.IFrameSendKey(ukrNetHomePage.loginFrameName, ukrNetHomePage.loginFieldId, login);
-            ukrNetHomePage.IFrameSendKey(ukrNetHomePage.loginFrameName, ukrNetHomePage.passwordFieldId, validPassword);
-            ukrNetHomePage.IFrameClickElement(ukrNetHomePage.loginFrameName, ukrNetHomePage.submitButton);
-            ukrNetHomePage.IFrameClickElement(ukrNetHomePage.loginFrameName, ukrNetHomePage.incomingMailLink);
-            driver.SwitchTo().Window(driver.WindowHandles[1]);
-            Thread.Sleep(3000);
-            driver.FindElement(By.CssSelector("button.default.compose")).Click();
-            //var ukrNetMailPage = new UkrNetMailPage(driver);
-            //ukrNetMailPage.writeLeterButton.Click();
+            driver.SwitchTo().Frame(ukrNetHomePage.loginFrame);
 
-            Thread.Sleep(1000);
-            driver.FindElement(By.CssSelector("input[name='toFieldInput']")).SendKeys(sendTo);
-            driver.FindElement(By.CssSelector("input[name='subject']")).SendKeys(subject);
-            driver.FindElement(By.CssSelector("#file-to-upload")).SendKeys("C:/Users/oli4k/Documents/test.txt");
-            driver.SwitchTo().Frame("mce_0_ifr");
-            driver.FindElement(By.CssSelector("#tinymce")).SendKeys(messageText);
+            ukrNetHomePage.loginField.SendKeys(login);
+            ukrNetHomePage.passwordField.SendKeys(validPassword);
+            ukrNetHomePage.submitButton.Click();
+            ukrNetHomePage.incomingMailLink.Click();
+            SwitchToNewWindov(oldWindowHandles);
+
+            var ukrNetMailPage = new UkrNetMailPage(driver);
+            ukrNetMailPage.writeLetterButton.Click();
+            ukrNetMailPage.sendToField.SendKeys(sendTo);
+            ukrNetMailPage.subjectField.SendKeys(subject);
+            ukrNetMailPage.fileInputField.SendKeys(filePath);
+            driver.SwitchTo().Frame(ukrNetMailPage.massegeFrameId);
+            ukrNetMailPage.messageField.SendKeys(messageText);
+
             driver.SwitchTo().DefaultContent();
-            driver.FindElement(By.CssSelector("button.default.send")).Click();
-
-
-
-            //var ukrNetMailPage = new UkrNetMailPage(driver);
-            //ukrNetHomePage.writeLetterButton.Click();
-            //ukrNetMailPage.sendToField.SendKeys(sendTo);
-            //ukrNetHomePage.subjectField.SendKeys(subject);
-
-
-
-
-            Thread.Sleep(3000);
-
+            ukrNetMailPage.sendLetterButton.Click();
+            string actualMassegeSendText = ukrNetMailPage.letterSendingResultMessage.GetAttribute("innerText");
 
             //Assert
-            //  Assert.AreEqual(expectedErrorMassage, actualErrorMassage, $"Expected massage is '{expectedErrorMassage}', but actual is '{actualErrorMassage}'");
+            Assert.AreEqual(exepectedMassegeSendText, actualMassegeSendText, $"Expected massage is '{exepectedMassegeSendText}', but actual is '{actualMassegeSendText}'");
+        }
 
+        private void SwitchToNewWindov(ReadOnlyCollection<string> oldWindowHandles)
+        {
+            var newWindowHandles = driver.WindowHandles;
+            foreach (var handle in newWindowHandles)
+            {
+                if (!oldWindowHandles.Contains(handle))
+                {
+                    driver.SwitchTo().Window(handle);
+                }
+            }
         }
 
     }
