@@ -38,6 +38,7 @@ namespace SeleniumHomeWork.Pages
 
 
         //driver.FindElement(By.CssSelector("input[name='toFieldInput']")).SendKeys(sendTo);
+        //test
         //driver.FindElement(By.CssSelector("input[name='subject']")).SendKeys(subject);
         //driver.FindElement(By.CssSelector("#file-to-upload")).SendKeys("C:/Users/oli4k/Documents/test.txt");
         //driver.SwitchTo().Frame("mce_0_ifr");
